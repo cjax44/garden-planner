@@ -1,11 +1,14 @@
 import './App.css';
-import GardenApp from "./components/GardenApp";
+import AppRoutes from './AppRoutes';
+import { BrowserRouter } from "react-router-dom";
 
 
 function App() {
   return (
     <div className="App">
-      <GardenApp />
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
     </div>
   );
 }

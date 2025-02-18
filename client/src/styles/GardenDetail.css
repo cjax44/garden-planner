@@ -1,0 +1,51 @@
+.garden-detail {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .layout-container {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  /* Left panel styles */
+  .left-panel {
+    flex: 1;
+    max-width: 250px;
+    padding: 15px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .left-panel h2 {
+    margin-bottom: 10px;
+  }
+  
+  .property {
+    margin-bottom: 15px;
+  }
+  
+  .property label {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Right panel styles */
+  .right-panel {
+    flex: 3;
+    padding: 15px;
+  }
+  
+  .grid-layout {
+    background: #f8f8f8;
+    border: 1px dashed #bbb;
+    min-height: 400px;
+  }
+  
+  .grid-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
