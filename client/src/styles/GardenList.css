@@ -1,0 +1,76 @@
+.garden-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .garden-card {
+    width: 60%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .garden-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 4px #388E3C;
+
+  }
+  
+  .garden-column {
+    flex: 1;
+    text-align: left;
+    padding: 0 10px;
+  }
+  
+  .garden-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+  }
+  
+  .action-icon {
+    cursor: pointer;
+    color: #4CAF50;
+    font-size: 1.2em;
+    transition: color 0.2s;
+  }
+  
+  .action-icon:hover {
+    color: #388E3C;
+  }
+  
+  .garden-card input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .garden-card button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #4CAF50;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .garden-card button:hover {
+    background-color: #388E3C;
+  }
+  
+  /* Specific styling for the add new garden card */
+  .add-new-card {
+    background: #f9f9f9;
+    cursor: default;
+  }
+  
