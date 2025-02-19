@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -8,24 +8,35 @@ const GardenApp = ({ user, onLogout }) => {
   const [gardens, setGardens] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch gardens on component mount
-  useEffect(() => {
-    fetchGardens();
-  }, []);
+  // Helper function to get token from localStorage
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  };
 
-  const fetchGardens = async () => {
+  // Wrap fetchGardens in useCallback so it doesn't change on every render
+  const fetchGardens = useCallback(async () => {
     try {
-      const response = await axios.get("/api/gardens");
+      const response = await axios.get("/api/gardens", getAuthHeader());
       setGardens(response.data);
     } catch (error) {
       console.error("Error fetching gardens:", error);
     }
-  };
+  }, []); // No dependencies; getAuthHeader is defined inline and assumed stable
+
+  // Fetch gardens on component mount
+  useEffect(() => {
+    fetchGardens();
+  }, [fetchGardens]);
 
   // Update an existing garden
   const updateGarden = async (gardenId, updatedData) => {
     try {
-      await axios.put(`/api/gardens/${gardenId}`, updatedData);
+      await axios.put(`/api/gardens/${gardenId}`, updatedData, getAuthHeader());
       fetchGardens();
     } catch (error) {
       console.error("Error updating garden:", error);
@@ -35,7 +46,7 @@ const GardenApp = ({ user, onLogout }) => {
   // Delete a garden
   const deleteGarden = async (gardenId) => {
     try {
-      await axios.delete(`/api/gardens/${gardenId}`);
+      await axios.delete(`/api/gardens/${gardenId}`, getAuthHeader());
       fetchGardens();
     } catch (error) {
       console.error("Error deleting garden:", error);
@@ -45,7 +56,7 @@ const GardenApp = ({ user, onLogout }) => {
   // Add a new garden
   const addGarden = async (newData) => {
     try {
-      await axios.post("/api/gardens", newData);
+      await axios.post("/api/gardens", newData, getAuthHeader());
       fetchGardens();
     } catch (error) {
       console.error("Error creating garden:", error);

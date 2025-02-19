@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../Navbar';
+import GardenAppNavBar from '../GardenAppNavBar';
 import GardenProperties from './GardenProperties';
 import GardenWorkArea from './GardenWorkArea';
 import '../../styles/gardens/GardenDetail.css';
@@ -42,7 +42,7 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
   if (loading) {
     return (
       <div>
-        <Navbar user={user} onLogout={onLogout} />
+        <GardenAppNavBar user={user} onLogout={onLogout} />
         <div className="garden-detail">
           <h1>Loading...</h1>
         </div>
@@ -52,7 +52,7 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
 
   return (
     <div>
-      <Navbar user={user} onLogout={onLogout} />
+      <GardenAppNavBar user={user} onLogout={onLogout} />
       <div className="garden-detail">
         <h1>{garden.name}</h1>
         <div className="layout-container">

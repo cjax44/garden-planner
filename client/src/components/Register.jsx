@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/Register.css';
 
-const Register = ({ onRegister }) => {
+const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -24,10 +25,16 @@ const Register = ({ onRegister }) => {
       return;
     }
     try {
-      // Call your registration logic here
-      await onRegister(formData);
-      navigate('/login'); // redirect to login after successful registration
+      // Send a POST request to your registration endpoint.
+      await axios.post('http://localhost:8080/api/auth/register', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      // After successful registration, redirect to the login page.
+      navigate('/login');
     } catch (err) {
+      console.error("Registration error:", err);
       setError('Registration failed. Please try again.');
     }
   };
