@@ -10,12 +10,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(name = "username", nullable = false)
     private String name;
-    
+
     @Column(unique = true, nullable = false)
     private String email;
     
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String password; // This will store the bcrypt-hashed password
 
     // Default constructor

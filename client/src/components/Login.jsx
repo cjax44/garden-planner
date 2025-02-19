@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -15,9 +15,20 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Call your authentication logic here
-      await onLogin(formData);
-      navigate('/dashboard'); // or any protected route
+      const response = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      // Assuming the response returns a JSON object with a "token" property
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');
     }

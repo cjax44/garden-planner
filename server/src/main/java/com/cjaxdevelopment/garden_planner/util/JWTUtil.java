@@ -1,5 +1,6 @@
 package com.cjaxdevelopment.garden_planner.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,13 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, secret)  // Sign with our secret key using HS256 algorithm
                 .compact();
     }
+
+    public Claims validateToken(String token) {
+    return Jwts.parser()
+               .setSigningKey(secret)
+               .parseClaimsJws(token)
+               .getBody();
+}
+
     
-    // Optionally, you can add a method to validate or parse the token.
 }

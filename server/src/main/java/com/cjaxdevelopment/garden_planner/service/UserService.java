@@ -29,10 +29,16 @@ public class UserService {
     public User authenticateUser(String email, String password) throws Exception {
         User user = userRepository.findByEmail(email)
                        .orElseThrow(() -> new Exception("User not found"));
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        String storedHash = user.getPassword();
+        // Normalize hash if it starts with "$2y$"
+        if (storedHash.startsWith("$2y$")) {
+            storedHash = "$2a$" + storedHash.substring(4);
+        }
+        if (passwordEncoder.matches(password, storedHash)) {
             return user;
         }
         throw new Exception("Invalid credentials");
     }
+    
 }
 
