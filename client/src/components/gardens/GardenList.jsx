@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "../styles/GardenList.css";
+import "../../styles/gardens/GardenList.css";
 
 const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   const [editingGardenId, setEditingGardenId] = useState(null);
