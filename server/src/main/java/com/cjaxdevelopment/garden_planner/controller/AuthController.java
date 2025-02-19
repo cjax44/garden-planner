@@ -38,7 +38,6 @@ public class AuthController {
             User user = userService.authenticateUser(
                 userMap.get("email"), userMap.get("password"));
             String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getName());
-            System.out.println(token);
             return ResponseEntity.ok(Collections.singletonMap("token", token));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
