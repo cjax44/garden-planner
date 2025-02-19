@@ -64,7 +64,7 @@ const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   return (
     <div className="garden-list">
       {/* "Add New Garden" row at the top */}
-      <div className="garden-card add-new-card">
+      <div className="garden-card add-new-card" style={{ cursor: "default" }}>
         <div className="garden-column garden-info">
           <input
             type="text"
@@ -94,6 +94,7 @@ const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
           <div
             key={garden.gardenId}
             className="garden-card"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               // Only navigate if not editing this card
               if (editingGardenId !== garden.gardenId) {

@@ -2,12 +2,14 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import GardenApp from './components/gardens/GardenApp';
-import GardenDetail from './components/gardens/GardenDetail'; // Your detailed garden page
+import GardenDetail from './components/gardens/GardenDetail';
 import Login from './components/Login';
 import Register from './components/Register';
+import { useSelector } from 'react-redux';
 
 const AppRoutes = () => {
-    const isAuthenticated = true/* your logic to check if user is logged in */;
+    const token = useSelector((state) => state.auth.token);
+    const isAuthenticated = !!token;  // true if token exists
 
     return (
         <Routes>
@@ -15,7 +17,6 @@ const AppRoutes = () => {
             <Route path="/gardens/:id" element={<GardenDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* Redirect the root to login */}
             <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
     );

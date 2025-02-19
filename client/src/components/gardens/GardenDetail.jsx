@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import GardenAppNavBar from '../GardenAppNavBar';
 import GardenProperties from './GardenProperties';
 import GardenWorkArea from './GardenWorkArea';
 import '../../styles/gardens/GardenDetail.css';
 
-const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
-  const params = useParams();
-  const gardenId = params.id
+const GardenDetail = ({ garden: initialGarden }) => {
+  const { id: gardenId } = useParams();
+  const token = useSelector((state) => state.auth.token);
   const [garden, setGarden] = useState(initialGarden);
   const [loading, setLoading] = useState(!initialGarden);
   const [dimensions, setDimensions] = useState({
@@ -17,8 +18,12 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
   });
 
   useEffect(() => {
-    if (!garden) {
-      axios.get(`/api/gardens/${gardenId}`)
+    // Only fetch garden details if garden is not already provided and we have a token
+    if (!garden && token) {
+      axios
+        .get(`/api/gardens/${gardenId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((response) => {
           setGarden(response.data);
           setDimensions({
@@ -32,7 +37,7 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
           setLoading(false);
         });
     }
-  }, [garden, gardenId]);
+  }, [garden, gardenId, token]);
 
   const handleDimensionChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +47,7 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
   if (loading) {
     return (
       <div>
-        <GardenAppNavBar user={user} onLogout={onLogout} />
+        <GardenAppNavBar />
         <div className="garden-detail">
           <h1>Loading...</h1>
         </div>
@@ -52,7 +57,7 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
 
   return (
     <div>
-      <GardenAppNavBar user={user} onLogout={onLogout} />
+      <GardenAppNavBar />
       <div className="garden-detail">
         <h1>{garden.name}</h1>
         <div className="layout-container">
@@ -65,11 +70,6 @@ const GardenDetail = ({ garden: initialGarden, user, onLogout }) => {
       </div>
     </div>
   );
-};
-
-GardenDetail.defaultProps = {
-  user: null,
-  onLogout: () => {},
 };
 
 export default GardenDetail;

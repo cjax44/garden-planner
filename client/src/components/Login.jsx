@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setToken, fetchUser } from '../store/authSlice'; // Adjust path as needed
 import '../styles/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -26,8 +30,12 @@ const Login = () => {
       }
 
       const data = await response.json();
-      // Assuming the response returns a JSON object with a "token" property
+      // Save the token for persistence
       localStorage.setItem('token', data.token);
+      // Dispatch an action to store the token in Redux
+      dispatch(setToken(data.token));
+      // Now fetch the user details using the token
+      await dispatch(fetchUser());
       navigate('/dashboard');
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');

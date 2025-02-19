@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice'; // Adjust path as needed
+import '../styles/GardenAppNavBar.css';
 
-const Navbar = ({ user, onLogout }) => {
+const GardenAppNavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // Access both user and loading from the auth slice
+  const { user, loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  console.log('user nav = ', user);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(prev => !prev);
   };
 
-  // Optional: close dropdown when clicking outside (could be enhanced with useEffect)
-  // For simplicity, we'll assume the user toggles it manually.
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <nav className="navbar">
@@ -20,7 +27,10 @@ const Navbar = ({ user, onLogout }) => {
         </Link>
       </div>
       <div className="navbar-right">
-        {user ? (
+        {loading ? (
+          // Display a loading state while the user is being fetched
+          <span>Loading...</span>
+        ) : user ? (
           <div className="profile-menu">
             <span className="profile-name" onClick={toggleDropdown}>
               {user.name}
@@ -28,7 +38,7 @@ const Navbar = ({ user, onLogout }) => {
             {isDropdownOpen && (
               <div className="dropdown-menu">
                 <Link to="/profile" className="dropdown-item">My Profile</Link>
-                <button onClick={onLogout} className="dropdown-item">Sign Out</button>
+                <button onClick={handleLogout} className="dropdown-item">Sign Out</button>
               </div>
             )}
           </div>
@@ -40,4 +50,4 @@ const Navbar = ({ user, onLogout }) => {
   );
 };
 
-export default Navbar;
+export default GardenAppNavBar;

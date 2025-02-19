@@ -1,24 +1,33 @@
+// GardenApp.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../Navbar";
+import GardenAppNavBar from "../GardenAppNavBar";
 import GardenList from "./GardenList";
+import { useSelector, useDispatch } from 'react-redux';
+import { logout as logoutAction } from '../../store/authSlice';
 
-const GardenApp = ({ user, onLogout }) => {
-  const [gardens, setGardens] = useState([]);
+const GardenApp = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
+  
+  console.log(user)
+  const logout = () => {
+    dispatch(logoutAction());
+  };  const [gardens, setGardens] = useState([]);
   const navigate = useNavigate();
 
-  // Helper function to get token from localStorage
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
+  // Memoize the getAuthHeader function so that it only changes when token changes
+  const getAuthHeader = useCallback(() => {
     return {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-  };
+  }, [token]);
 
-  // Wrap fetchGardens in useCallback so it doesn't change on every render
+  // Wrap fetchGardens in useCallback so that it re-runs only when getAuthHeader changes
   const fetchGardens = useCallback(async () => {
     try {
       const response = await axios.get("/api/gardens", getAuthHeader());
@@ -26,9 +35,9 @@ const GardenApp = ({ user, onLogout }) => {
     } catch (error) {
       console.error("Error fetching gardens:", error);
     }
-  }, []); // No dependencies; getAuthHeader is defined inline and assumed stable
+  }, [getAuthHeader]);
 
-  // Fetch gardens on component mount
+  // Fetch gardens on component mount and when fetchGardens changes
   useEffect(() => {
     fetchGardens();
   }, [fetchGardens]);
@@ -70,7 +79,7 @@ const GardenApp = ({ user, onLogout }) => {
 
   return (
     <div>
-      <Navbar user={user} onLogout={onLogout} />
+      <GardenAppNavBar user={user} onLogout={logout} />
       <div style={{ padding: "20px" }}>
         <h1>Garden Manager</h1>
         <GardenList
