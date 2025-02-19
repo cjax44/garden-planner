@@ -29,8 +29,12 @@ public class UserService {
     public User authenticateUser(String email, String password) throws Exception {
         User user = userRepository.findByEmail(email)
                        .orElseThrow(() -> new Exception("User not found"));
+        System.out.println("Found user: " + user);
         String storedHash = user.getPassword();
         // Normalize hash if it starts with "$2y$"
+        System.out.println("Raw password: " + password);
+
+        System.out.println("Stored hash: " + storedHash);
         if (storedHash.startsWith("$2y$")) {
             storedHash = "$2a$" + storedHash.substring(4);
         }
