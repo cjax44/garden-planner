@@ -1,4 +1,3 @@
-// GardenApp.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,12 +10,12 @@ const GardenApp = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
+  const [gardens, setGardens] = useState([]);
+  const navigate = useNavigate();
   
-  console.log(user)
   const logout = () => {
     dispatch(logoutAction());
-  };  const [gardens, setGardens] = useState([]);
-  const navigate = useNavigate();
+  };  
 
   // Memoize the getAuthHeader function so that it only changes when token changes
   const getAuthHeader = useCallback(() => {
@@ -30,13 +29,18 @@ const GardenApp = () => {
   // Wrap fetchGardens in useCallback so that it re-runs only when getAuthHeader changes
   const fetchGardens = useCallback(async () => {
     try {
-      const response = await axios.get("/api/gardens", getAuthHeader());
+      const config = {
+        ...getAuthHeader(),
+        params: { userId: user.id }
+      };
+      const response = await axios.get("/api/gardens", config);
+      console.log('response = ', response.data)
       setGardens(response.data);
     } catch (error) {
       console.error("Error fetching gardens:", error);
     }
-  }, [getAuthHeader]);
-
+  }, [getAuthHeader, user]);
+  
   // Fetch gardens on component mount and when fetchGardens changes
   useEffect(() => {
     fetchGardens();
@@ -80,8 +84,7 @@ const GardenApp = () => {
   return (
     <div>
       <GardenAppNavBar user={user} onLogout={logout} />
-      <div style={{ padding: "20px" }}>
-        <h1>Garden Manager</h1>
+      <div style={{ padding: "80px 20px" }}>
         <GardenList
           gardens={gardens}
           onUpdate={updateGarden}

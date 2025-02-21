@@ -29,7 +29,8 @@ public class GardenController {
     }
 
     @GetMapping
-    public List<Garden> getAllGardens() { return gardenService.getAllGardens(); 
+    public List<Garden> getAllGardens(@RequestParam Long userId) {
+        return gardenService.getGardensByUserId(userId);
     }
 
     @PutMapping("/{id}")
@@ -37,6 +38,12 @@ public class GardenController {
         return gardenService.getGardenById(id).map(garden -> {
             garden.setName(gardenDetails.getName());
             garden.setDescription(gardenDetails.getDescription());
+            // Set the new properties
+            garden.setNotes(gardenDetails.getNotes());
+            garden.setSunExposure(gardenDetails.getSunExposure());
+            garden.setSoilType(gardenDetails.getSoilType());
+            garden.setRaisedBeds(gardenDetails.getRaisedBeds());
+            
             Garden updatedGarden = gardenService.saveGarden(garden);
             return ResponseEntity.ok(updatedGarden);
         }).orElseGet(() -> ResponseEntity.notFound().build());

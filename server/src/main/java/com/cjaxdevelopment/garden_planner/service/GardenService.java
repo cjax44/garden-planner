@@ -4,7 +4,6 @@ import com.cjaxdevelopment.garden_planner.model.Garden;
 import com.cjaxdevelopment.garden_planner.repository.GardenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +26,11 @@ public class GardenService {
     // Retrieve all gardens
     public List<Garden> getAllGardens() {
         return gardenRepository.findAll();
+    }
+
+    // Retrieve gardens by userId
+    public List<Garden> getGardensByUserId(Long userId) {
+        return gardenRepository.findByUserId(userId);
     }
 
     // Delete a garden

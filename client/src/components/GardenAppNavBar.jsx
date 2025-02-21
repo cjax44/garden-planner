@@ -9,7 +9,6 @@ const GardenAppNavBar = () => {
   // Access both user and loading from the auth slice
   const { user, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  console.log('user nav = ', user);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(prev => !prev);
@@ -22,7 +21,7 @@ const GardenAppNavBar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="navbar-logo">
+        <Link to="/dashboard" className="navbar-logo">
           Garden Planner
         </Link>
       </div>

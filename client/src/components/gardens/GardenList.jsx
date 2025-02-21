@@ -16,7 +16,9 @@ const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   });
 
   // Sort gardens in descending order by gardenId
-  const sortedGardens = gardens.slice().sort((a, b) => b.gardenId - a.gardenId);
+  const sortedGardens = Array.isArray(gardens)
+  ? gardens.slice().sort((a, b) => a.name.localeCompare(b.name))
+  : [];
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
