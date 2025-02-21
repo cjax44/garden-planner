@@ -1,88 +1,67 @@
-.garden-list {
+.garden-list-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.new-garden-section,
+.existing-gardens-section {
+  background-color: #fff;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.new-garden-section h2,
+.existing-gardens-section h2 {
+  margin-bottom: 1rem;
+}
+
+.new-garden-form,
+.garden-list-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 1rem;
 }
 
 .garden-card {
-  width: 60%;
-  max-width: 900px;
-  position: relative; /* ensure the card fills its area */
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  padding: 1rem;
+  border-bottom: 1px solid #eaeaea;
 }
 
-.garden-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 2px 4px #388E3C;
-}
-
-/* Make non-interactive parts let clicks pass through */
-.garden-card .garden-info,
-.garden-card .garden-description {
-  pointer-events: none;
-}
-
-/* Ensure interactive elements still work */
-.garden-actions,
-.garden-card input[type="text"],
-.garden-card button {
-  pointer-events: auto;
+.garden-card:last-child {
+  border-bottom: none;
 }
 
 .garden-column {
   flex: 1;
-  text-align: left;
-  padding: 0 10px;
+  padding: 0 0.5rem;
 }
 
-.garden-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-end;
+.garden-info h2 {
+  margin: 0;
 }
 
-.action-icon {
+.garden-description p {
+  margin: 0;
+}
+
+.garden-actions button,
+.garden-actions .action-icon {
+  margin-left: 0.5rem;
   cursor: pointer;
-  color: #4CAF50;
-  font-size: 1.2em;
-  transition: color 0.2s;
 }
 
-.action-icon:hover {
-  color: #388E3C;
+.garden-card {
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.garden-card input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.garden-card button {
-  padding: 8px 12px;
-  border: none;
-  background-color: #4CAF50;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.garden-card button:hover {
-  background-color: #388E3C;
-}
-
-/* Specific styling for the add new garden card */
-.add-new-card {
-  background: #f9f9f9;
-  cursor: default;
+.garden-card:hover {
+  background-color: #f9f9f9; /* a subtle background change */
+  transform: translateY(-2px); /* slight upward movement */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* adds depth */
 }

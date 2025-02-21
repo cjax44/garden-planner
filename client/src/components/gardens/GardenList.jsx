@@ -1,7 +1,39 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/gardens/GardenList.css";
+
+// GardenCard component for individual garden cards
+const GardenCard = ({ garden, onEdit, onDelete, onClick }) => {
+  return (
+    <div
+      onClick={onClick}
+      className="bg-white p-4 rounded shadow transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+    >
+      <h2 className="text-xl font-semibold">{garden.name}</h2>
+      <p className="text-gray-600">{garden.description}</p>
+      <div className="mt-2 flex justify-end">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(garden);
+          }}
+          className="mr-2 px-3 py-1 text-sm bg-blue-500 text-white rounded"
+        >
+          Edit
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(garden.gardenId);
+          }}
+          className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   const [editingGardenId, setEditingGardenId] = useState(null);
@@ -12,13 +44,13 @@ const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   const [newGardenData, setNewGardenData] = useState({
     name: "",
     description: "",
-    userId: 1, // Update as needed or pass as a prop
+    userId: 1, // Adjust as needed
   });
 
-  // Sort gardens in descending order by gardenId
+  // Sort gardens alphabetically by name
   const sortedGardens = Array.isArray(gardens)
-  ? gardens.slice().sort((a, b) => a.name.localeCompare(b.name))
-  : [];
+    ? gardens.slice().sort((a, b) => a.name.localeCompare(b.name))
+    : [];
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -64,103 +96,98 @@ const GardenList = ({ gardens, onUpdate, onDelete, onAdd, onCardClick }) => {
   };
 
   return (
-    <div className="garden-list">
-      {/* "Add New Garden" row at the top */}
-      <div className="garden-card add-new-card" style={{ cursor: "default" }}>
-        <div className="garden-column garden-info">
+    <div className="garden-list-page max-w-3xl mx-auto p-8 space-y-8">
+      {/* New Garden Section */}
+      <section className="new-garden-section bg-white p-6 rounded shadow">
+        <h2 className="text-2xl font-bold mb-4">Add a New Garden</h2>
+        <div className="flex flex-col md:flex-row gap-4">
           <input
             type="text"
             name="name"
             value={newGardenData.name}
             onChange={handleNewChange}
             placeholder="New Garden Name"
+            className="flex-1 border border-gray-300 rounded px-3 py-2"
           />
-        </div>
-        <div className="garden-column garden-description">
           <input
             type="text"
             name="description"
             value={newGardenData.description}
             onChange={handleNewChange}
             placeholder="New Garden Description"
+            className="flex-1 border border-gray-300 rounded px-3 py-2"
           />
-        </div>
-        <div className="garden-column garden-actions">
-          <button onClick={addNewGarden}>Add Garden</button>
-        </div>
-      </div>
-
-      {/* Render sorted gardens */}
-      {sortedGardens && sortedGardens.length > 0 ? (
-        sortedGardens.map((garden) => (
-          <div
-            key={garden.gardenId}
-            className="garden-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              // Only navigate if not editing this card
-              if (editingGardenId !== garden.gardenId) {
-                onCardClick(garden.gardenId);
-              }
-            }}
+          <button
+            onClick={addNewGarden}
+            className="px-4 py-2 bg-green-500 text-white rounded"
           >
-            {editingGardenId === garden.gardenId ? (
-              <>
-                <div className="garden-column garden-info">
-                  <input
-                    type="text"
-                    name="name"
-                    value={editingFormData.name}
-                    onChange={handleEditChange}
-                    placeholder="Garden Name"
-                  />
-                </div>
-                <div className="garden-column garden-description">
-                  <input
-                    type="text"
-                    name="description"
-                    value={editingFormData.description}
-                    onChange={handleEditChange}
-                    placeholder="Garden Description"
-                  />
-                </div>
-                <div className="garden-column garden-actions">
-                  <button onClick={(e) => saveEditing(garden.gardenId, e)}>
-                    Save
-                  </button>
-                  <button onClick={cancelEditing}>Cancel</button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="garden-column garden-info">
-                  <h2>{garden.name}</h2>
-                </div>
-                <div className="garden-column garden-description">
-                  <p>{garden.description}</p>
-                </div>
+            Add Garden
+          </button>
+        </div>
+      </section>
+
+      {/* Existing Gardens Section */}
+      <section className="existing-gardens-section">
+        <h2 className="text-2xl font-bold mb-4">Your Gardens</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {sortedGardens && sortedGardens.length > 0 ? (
+            sortedGardens.map((garden) =>
+              editingGardenId === garden.gardenId ? (
                 <div
-                  className="garden-column garden-actions"
-                  onClick={(e) => e.stopPropagation()}
+                  key={garden.gardenId}
+                  className="bg-white p-4 rounded shadow"
+                  onClick={() => {}}
                 >
-                  <FontAwesomeIcon
-                    icon={faPencilAlt}
-                    className="action-icon"
-                    onClick={(e) => startEditing(garden, e)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    className="action-icon"
-                    onClick={(e) => handleDelete(garden.gardenId, e)}
-                  />
+                  <div className="mb-2">
+                    <input
+                      type="text"
+                      name="name"
+                      value={editingFormData.name}
+                      onChange={handleEditChange}
+                      placeholder="Garden Name"
+                      className="w-full border border-gray-300 rounded px-3 py-2"
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <input
+                      type="text"
+                      name="description"
+                      value={editingFormData.description}
+                      onChange={handleEditChange}
+                      placeholder="Garden Description"
+                      className="w-full border border-gray-300 rounded px-3 py-2"
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      onClick={(e) => saveEditing(garden.gardenId, e)}
+                      className="px-3 py-1 bg-blue-500 text-white rounded"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={cancelEditing}
+                      className="px-3 py-1 bg-gray-500 text-white rounded"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
-        ))
-      ) : (
-        <p>No gardens available</p>
-      )}
+              ) : (
+                <GardenCard
+                  key={garden.gardenId}
+                  garden={garden}
+                  onEdit={(garden) => startEditing(garden, { stopPropagation: () => {} })}
+                  onDelete={(gardenId) => handleDelete(gardenId, { stopPropagation: () => {} })}
+                  onClick={() => onCardClick(garden.gardenId)}
+                />
+              )
+            )
+          ) : (
+            <p>No gardens available</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
